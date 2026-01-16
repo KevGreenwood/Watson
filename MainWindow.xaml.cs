@@ -10,6 +10,11 @@ namespace Watson
 {
     public partial class MainWindow : FluentWindow
     {
+        public string key = KeyFinder.GetWindowsKey62();
+
+        public string censoredKey;
+        private bool isCensored = true;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -22,12 +27,34 @@ namespace Watson
               true                                      // Whether to change accents automatically
             );
 
+            WindowsHandler.InitializeAsync();
+            productName.Text = WindowsHandler.ProductName;
+            productID.Text = WindowsHandler.ProductID;
+            buildVersion.Text = WindowsHandler.Version;
+            softKey.Text = WindowsHandler.licenseKey != string.Empty ? WindowsHandler.licenseKey : "Not found";
+            var splitted = key.Split('-');
+            for (int i = 0; i < splitted.Length-1; i++)
+            {
+                splitted[i] = "XXXXX";
+            }
 
-            productName.Content = WindowsHandler.ProductName;
-            productID.Content = WindowsHandler.ProductKeyID;
-            buildVersion.Content = WindowsHandler.Version;
-            softKey.Content = WindowsHandler.licenseKey != string.Empty ? WindowsHandler.licenseKey : "Not found";
-            oemKey.Content = KeyFinder.GetWindowsKey62();
+           censoredKey = string.Join("-", splitted);
+
+            oemKey.Text = censoredKey;
+            oemEdition.Text = WindowsHandler.oemDescription;
+        }
+
+        private void oemKey_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.LeftButton != System.Windows.Input.MouseButtonState.Pressed)
+                return;
+
+            isCensored = !isCensored;
+
+            oemKey.Text = isCensored
+                ? censoredKey
+                : key;
+
         }
     }
 
@@ -37,10 +64,11 @@ namespace Watson
         public static string UBR { get; set; }
         public static string Version { get; set; }
         public static string ActID { get; set; }
+        public static string ProductID = WindowsRK.GetValue("ProductId").ToString();
 
         public static string ProductKeyID = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x08, 0x64);
         public static string ProductKey = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x3F8, 0x80);
-
+        public static string oemDescription { get; set; }
         public static string licenseKey { get; private set; }
         public static string ProductName = WindowsRK.GetValue("ProductName").ToString();
         public static string EditionID = WindowsRK.GetValue("EditionID").ToString();
@@ -111,7 +139,7 @@ namespace Watson
             ActID = searcher.Get().Cast<ManagementObject>()
                                  .FirstOrDefault()?["ID"] as string ?? string.Empty;
             GetLicenseKey();
-            WindowsRK.Close();
+            //WindowsRK.Close();
         }
 
         public static void GetLicenseKey()
@@ -119,9 +147,10 @@ namespace Watson
             ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT OA3xOriginalProductKey FROM SoftwareLicensingService");
             licenseKey = searcher.Get().Cast<ManagementObject>()
                                  .FirstOrDefault()?["OA3xOriginalProductKey"] as string ?? string.Empty;
+            searcher = new ManagementObjectSearcher("SELECT OA3xOriginalProductKeyDescription FROM SoftwareLicensingService");
 
-
-
+            oemDescription = searcher.Get().Cast<ManagementObject>()
+                                 .FirstOrDefault()?["OA3xOriginalProductKeyDescription"] as string ?? string.Empty;
         }
     }
 

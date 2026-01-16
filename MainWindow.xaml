@@ -1,57 +1,81 @@
-﻿<ui:FluentWindow 
+﻿<ui:FluentWindow
     x:Class="Watson.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-        xmlns:local="clr-namespace:Watson"
-        mc:Ignorable="d"
-        Title="Watson" Height="450" Width="800"
-    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
-    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Watson"
+    Width="900"
+    Height="550"
+    MinWidth="10"
     ExtendsContentIntoTitleBar="True"
-    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     ResizeMode="CanResize"
-    WindowBackdropType="Mica">
+    WindowBackdropType="Acrylic"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <ui:TitleBar Title="Watson" Grid.Row="0" />
-        <StackPanel Grid.Row="1" Margin="20">
-            <ui:CardControl>
-                <Label x:Name="productName"/>
+        <ui:TitleBar Title="Watson"/>
 
-            </ui:CardControl>
-            <ui:CardControl>
-                <Label x:Name="productID"/>
+        <StackPanel Grid.Row="1" Margin="20" Orientation="Vertical">
+            <WrapPanel>
+                <TextBlock Text="Product Name"
+                           FontWeight="SemiBold"
+                           MinWidth="160"
+                           Margin="0,0,10,0"/>
+                <TextBlock x:Name="productName"
+                           TextWrapping="Wrap"
+                           MaxWidth="600"/>
+            </WrapPanel>
 
-            </ui:CardControl>
-            <ui:CardControl>
-                <Label x:Name="buildVersion"/>
+            <WrapPanel>
+                <TextBlock Text="Product ID"
+                           FontWeight="SemiBold"
+                           MinWidth="160"
+                           Margin="0,0,10,0"/>
+                <TextBlock x:Name="productID"
+                           TextWrapping="Wrap"/>
+            </WrapPanel>
 
-            </ui:CardControl>
-            <ui:CardControl>
-                <Label x:Name="softKey"/>
+            <WrapPanel>
+                <TextBlock Text="Build"
+                           FontWeight="SemiBold"
+                           MinWidth="160"
+                           Margin="0,0,10,0"/>
+                <TextBlock x:Name="buildVersion"/>
+            </WrapPanel>
 
-            </ui:CardControl>
-            <ui:CardControl>
-                <Label x:Name="oemKey"/>
+            <WrapPanel>
+                <TextBlock Text="Installed Key"
+                           FontWeight="SemiBold"
+                           MinWidth="160"
+                           Margin="0,0,10,0"/>
+                <TextBlock x:Name="softKey"
+                           TextWrapping="Wrap"/>
+            </WrapPanel>
 
-            </ui:CardControl>
-            <ui:CardControl>
-                <Label x:Name="oemEdition"/>
+            <WrapPanel>
+                <TextBlock Text="OEM Key"
+                           FontWeight="SemiBold"
+                           MinWidth="160"
+                           Margin="0,0,10,0"/>
+                <TextBlock x:Name="oemKey"
+                           TextWrapping="Wrap" MouseLeftButtonDown="oemKey_MouseLeftButtonDown"/>
+            </WrapPanel>
 
-            </ui:CardControl>
-         </StackPanel>
+            <WrapPanel>
+                <TextBlock Text="OEM Edition"
+                           FontWeight="SemiBold"
+                           MinWidth="160"
+                           Margin="0,0,10,0"/>
+                <TextBlock x:Name="oemEdition"
+                           TextWrapping="Wrap"/>
+            </WrapPanel>
 
-
-
-
-
-
+        </StackPanel>
     </Grid>
 </ui:FluentWindow>
