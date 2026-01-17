@@ -55,51 +55,56 @@
 
                     <WrapPanel>
                         <TextBlock Text="Product ID"
-               FontWeight="SemiBold"
                MinWidth="160"
                Margin="0,0,10,7"/>
                         <TextBlock x:Name="productID"
-               TextWrapping="Wrap" Margin="0,0,10,7"/>
+               TextWrapping="Wrap" Margin="0,0,10,7" Foreground="Gainsboro"/>
                     </WrapPanel>
 
                     <WrapPanel>
                         <TextBlock Text="Build"
-               FontWeight="SemiBold"
                MinWidth="160"
                Margin="0,0,10,7"/>
-                        <TextBlock x:Name="buildVersion" Margin="0,0,10,7"/>
+                        <TextBlock x:Name="buildVersion" Margin="0,0,10,7" Foreground="Gainsboro"/>
                     </WrapPanel>
 
-                    <WrapPanel>
-                        <TextBlock Text="Installed Key"
-               FontWeight="SemiBold"
-               MinWidth="160"
-               Margin="0,0,10,7"/>
-                        <TextBlock x:Name="softKey" Margin="0,0,10,7"
-               TextWrapping="Wrap"/>
-                    </WrapPanel>
+                    
 
 
 
                     <WrapPanel>
                         <TextBlock Text="OEM Edition"
-               FontWeight="SemiBold"
                MinWidth="160"
                Margin="0,0,10,7"/>
                         <TextBlock x:Name="oemEdition"
-               TextWrapping="Wrap" Margin="0,0,10,7"/>
+               TextWrapping="Wrap" Margin="0,0,10,7" Foreground="Gainsboro"/>
                     </WrapPanel>
 
                 </StackPanel>
             </ui:CardExpander>
 
-            <ui:Card Margin="20">
+            <ui:Card Margin="20,0,20,10">
                 <WrapPanel>
                     <TextBlock Text="OEM Key"
 FontWeight="SemiBold"
 MinWidth="160"
 Margin="0,0,10,0"/>
                     <TextBlock x:Name="oemKey"
+TextWrapping="Wrap" MouseLeftButtonDown="oemKey_MouseLeftButtonDown"/>
+
+                    <Button>Copy</Button>
+                    <Button>Show</Button>
+                </WrapPanel>
+            </ui:Card>
+
+
+            <ui:Card Margin="20,0,20,0">
+                <WrapPanel>
+                    <TextBlock Text="Installed Key"
+FontWeight="SemiBold"
+MinWidth="160"
+Margin="0,0,10,0"/>
+                    <TextBlock x:Name="softKey"
 TextWrapping="Wrap" MouseLeftButtonDown="oemKey_MouseLeftButtonDown"/>
 
                     <Button>Copy</Button>
