@@ -4,6 +4,8 @@ using System.Linq;
 using System.Management;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 using Wpf.Ui.Controls;
 
 namespace Watson
@@ -30,7 +32,7 @@ namespace Watson
             WindowsHandler.InitializeAsync();
             productName.Text = WindowsHandler.ProductName;
             productID.Text = WindowsHandler.ProductID;
-            buildVersion.Text = WindowsHandler.Version;
+            buildVersion.Text = WindowsHandler.Version + WindowsHandler.Platform;
             softKey.Text = WindowsHandler.licenseKey != string.Empty ? WindowsHandler.licenseKey : "Not found";
             var splitted = key.Split('-');
             for (int i = 0; i < splitted.Length-1; i++)
@@ -41,7 +43,13 @@ namespace Watson
            censoredKey = string.Join("-", splitted);
 
             oemKey.Text = censoredKey;
-            oemEdition.Text = WindowsHandler.oemDescription;
+            var filt = WindowsHandler.oemDescription.Split(' ');
+
+
+
+            oemEdition.Text = filt[1] + " " + filt[2];
+            backupKey.Text = WindowsHandler.backupKey;
+            version.Text = WindowsHandler.Version;
         }
 
         private void oemKey_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -56,16 +64,24 @@ namespace Watson
                 : key;
 
         }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Clipboard.Clear();
+            Clipboard.SetText(key);
+        }
     }
 
     public static class WindowsHandler
     {
         public static RegistryKey WindowsRK = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", false);
+        public static RegistryKey BKkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform", false);
+
+        public static string backupKey = BKkey.GetValue("BackupProductKeyDefault").ToString();
         public static string UBR { get; set; }
         public static string Version { get; set; }
         public static string ActID { get; set; }
         public static string ProductID = WindowsRK.GetValue("ProductId").ToString();
-
         public static string ProductKeyID = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x08, 0x64);
         public static string ProductKey = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x3F8, 0x80);
         public static string oemDescription { get; set; }
@@ -76,7 +92,7 @@ namespace Watson
         public static int Build = Convert.ToInt32(WindowsRK.GetValue("CurrentBuildNumber").ToString());
         //public static string GetMinimalInfo = $"{ProductName} {Platform}";
         public static string GetAllInfo { get; private set; }
-        private static string Platform = Environment.Is64BitOperatingSystem ? "64 bits" : "32 bits";
+        public static string Platform = Environment.Is64BitOperatingSystem ? "(64-bit)" : "(32-bit)";
         private static string DisplayVersion { get; set; }
 
         public static async Task InitializeAsync()
@@ -102,7 +118,7 @@ namespace Watson
                     else
                     {
                         DisplayVersion = WindowsRK.GetValue("DisplayVersion").ToString();
-                        Version = $"{DisplayVersion} ({Build}.{UBR})";
+                        Version = $"{DisplayVersion}";
 
                         if (Build >= 22000)
                         {
@@ -183,9 +199,7 @@ namespace Watson
                 key = Digits[current] + key;
             }
 
-            string keypart1 = key.Substring(1, last);
-            string keypart2 = key.Substring(last + 1, key.Length - (last + 1));
-            key = keypart1 + "N" + keypart2;
+            key = key.Substring(1, last) + "N" + key.Substring(last + 1, key.Length - (last + 1));
 
             for (int i = 5; i < key.Length; i += 6)
             {
