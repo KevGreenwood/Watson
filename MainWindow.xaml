@@ -6,7 +6,7 @@
     Title="Watson"
     Width="900"
     Height="550"
-    MinWidth="10"
+    MinWidth="345"
     ExtendsContentIntoTitleBar="True"
     ResizeMode="CanResize"
     WindowBackdropType="Acrylic"
@@ -21,61 +21,94 @@
 
         <ui:TitleBar Title="Watson"/>
 
-        <StackPanel Grid.Row="1" Margin="20" Orientation="Vertical">
-            <WrapPanel>
-                <TextBlock Text="Product Name"
-                           FontWeight="SemiBold"
-                           MinWidth="160"
-                           Margin="0,0,10,0"/>
-                <TextBlock x:Name="productName"
-                           TextWrapping="Wrap"
-                           MaxWidth="600"/>
-            </WrapPanel>
+        <StackPanel Grid.Row="1" >
+            <ui:CardExpander Margin="20" IsExpanded="True" Icon="{ui:SymbolIcon Info20}">
+                <ui:CardExpander.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ui:TextBlock
+                            Grid.Column="0"
+                            FontSize="16"
+                            FontTypography="BodyStrong"
+                            Text="Windows Specs" />
 
-            <WrapPanel>
-                <TextBlock Text="Product ID"
-                           FontWeight="SemiBold"
-                           MinWidth="160"
-                           Margin="0,0,10,0"/>
-                <TextBlock x:Name="productID"
-                           TextWrapping="Wrap"/>
-            </WrapPanel>
+                        <ui:Button
+                    Content="Copy"
+                            Grid.Column="1"
+                            Margin="0,0,16,0"/>
+                    </Grid>
+                </ui:CardExpander.Header>
+                <StackPanel  Orientation="Vertical">
 
-            <WrapPanel>
-                <TextBlock Text="Build"
-                           FontWeight="SemiBold"
-                           MinWidth="160"
-                           Margin="0,0,10,0"/>
-                <TextBlock x:Name="buildVersion"/>
-            </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Product Name"
+               FontWeight="SemiBold"
+               MinWidth="160"
+               Margin="0,0,10,7"/>
+                        <TextBlock x:Name="productName"
+               TextWrapping="Wrap"
+               MaxWidth="600"
+                                   Margin="0,0,10,7"/>
+                    </WrapPanel>
 
-            <WrapPanel>
-                <TextBlock Text="Installed Key"
-                           FontWeight="SemiBold"
-                           MinWidth="160"
-                           Margin="0,0,10,0"/>
-                <TextBlock x:Name="softKey"
-                           TextWrapping="Wrap"/>
-            </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Product ID"
+               FontWeight="SemiBold"
+               MinWidth="160"
+               Margin="0,0,10,7"/>
+                        <TextBlock x:Name="productID"
+               TextWrapping="Wrap" Margin="0,0,10,7"/>
+                    </WrapPanel>
 
-            <WrapPanel>
-                <TextBlock Text="OEM Key"
-                           FontWeight="SemiBold"
-                           MinWidth="160"
-                           Margin="0,0,10,0"/>
-                <TextBlock x:Name="oemKey"
-                           TextWrapping="Wrap" MouseLeftButtonDown="oemKey_MouseLeftButtonDown"/>
-            </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Build"
+               FontWeight="SemiBold"
+               MinWidth="160"
+               Margin="0,0,10,7"/>
+                        <TextBlock x:Name="buildVersion" Margin="0,0,10,7"/>
+                    </WrapPanel>
 
-            <WrapPanel>
-                <TextBlock Text="OEM Edition"
-                           FontWeight="SemiBold"
-                           MinWidth="160"
-                           Margin="0,0,10,0"/>
-                <TextBlock x:Name="oemEdition"
-                           TextWrapping="Wrap"/>
-            </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Installed Key"
+               FontWeight="SemiBold"
+               MinWidth="160"
+               Margin="0,0,10,7"/>
+                        <TextBlock x:Name="softKey" Margin="0,0,10,7"
+               TextWrapping="Wrap"/>
+                    </WrapPanel>
 
+
+
+                    <WrapPanel>
+                        <TextBlock Text="OEM Edition"
+               FontWeight="SemiBold"
+               MinWidth="160"
+               Margin="0,0,10,7"/>
+                        <TextBlock x:Name="oemEdition"
+               TextWrapping="Wrap" Margin="0,0,10,7"/>
+                    </WrapPanel>
+
+                </StackPanel>
+            </ui:CardExpander>
+
+            <ui:Card Grid.Row="1">
+                <WrapPanel>
+                    <TextBlock Text="OEM Key"
+FontWeight="SemiBold"
+MinWidth="160"
+Margin="0,0,10,0"/>
+                    <TextBlock x:Name="oemKey"
+TextWrapping="Wrap" MouseLeftButtonDown="oemKey_MouseLeftButtonDown"/>
+
+                    <Button>Copy</Button>
+                    <Button>Show</Button>
+                </WrapPanel>
+            </ui:Card>
         </StackPanel>
+
+        
     </Grid>
 </ui:FluentWindow>
