@@ -5,8 +5,8 @@ using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 using Wpf.Ui.Controls;
+
 
 namespace Watson
 {
@@ -30,26 +30,31 @@ namespace Watson
             );
 
             WindowsHandler.InitializeAsync();
+
+
+
             productName.Text = WindowsHandler.ProductName;
+            version.Text = WindowsHandler.DisplayVersion;
+            buildVersion.Text = WindowsHandler.Version + ' ' + WindowsHandler.Platform;
             productID.Text = WindowsHandler.ProductID;
-            buildVersion.Text = WindowsHandler.Version + WindowsHandler.Platform;
+            actID.Text = WindowsHandler.ActID;
+            var filt = WindowsHandler.oemDescription.Split(' ');
+            oemEdition.Text = filt[1] + " " + filt[2];
+
+
+
             softKey.Text = WindowsHandler.licenseKey != string.Empty ? WindowsHandler.licenseKey : "Not found";
             var splitted = key.Split('-');
-            for (int i = 0; i < splitted.Length-1; i++)
+            for (int i = 0; i < splitted.Length - 1; i++)
             {
                 splitted[i] = "XXXXX";
             }
 
-           censoredKey = string.Join("-", splitted);
+            censoredKey = string.Join("-", splitted);
 
             oemKey.Text = censoredKey;
-            var filt = WindowsHandler.oemDescription.Split(' ');
 
-
-
-            oemEdition.Text = filt[1] + " " + filt[2];
             backupKey.Text = WindowsHandler.backupKey;
-            version.Text = WindowsHandler.Version;
         }
 
         private void oemKey_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -62,7 +67,6 @@ namespace Watson
             oemKey.Text = isCensored
                 ? censoredKey
                 : key;
-
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -76,32 +80,26 @@ namespace Watson
     {
         public static RegistryKey WindowsRK = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", false);
         public static RegistryKey BKkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform", false);
-
-        public static string backupKey = BKkey.GetValue("BackupProductKeyDefault").ToString();
+        public static string ProductName = WindowsRK.GetValue("ProductName").ToString();
+        public static string DisplayVersion { get; set; }
+        public static int Build = Convert.ToInt32(WindowsRK.GetValue("CurrentBuildNumber"));
         public static string UBR { get; set; }
         public static string Version { get; set; }
-        public static string ActID { get; set; }
-        public static string ProductID = WindowsRK.GetValue("ProductId").ToString();
-        public static string ProductKeyID = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x08, 0x64);
-        public static string ProductKey = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x3F8, 0x80);
-        public static string oemDescription { get; set; }
-        public static string licenseKey { get; private set; }
-        public static string ProductName = WindowsRK.GetValue("ProductName").ToString();
-        public static string EditionID = WindowsRK.GetValue("EditionID").ToString();
-        public static float CurrentVersion = float.Parse(WindowsRK.GetValue("CurrentVersion").ToString()) / 10f;
-        public static int Build = Convert.ToInt32(WindowsRK.GetValue("CurrentBuildNumber").ToString());
-        //public static string GetMinimalInfo = $"{ProductName} {Platform}";
-        public static string GetAllInfo { get; private set; }
         public static string Platform = Environment.Is64BitOperatingSystem ? "(64-bit)" : "(32-bit)";
-        private static string DisplayVersion { get; set; }
+        public static string ProductID = WindowsRK.GetValue("ProductId").ToString();
+        public static string oemDescription { get; set; }
+        public static string backupKey = BKkey.GetValue("BackupProductKeyDefault").ToString();
+        public static string ActID { get; set; }
+        public static string ProductKey = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x3F8, 0x80);
+        public static string licenseKey { get; private set; }
+        private static float CurrentVersion = float.Parse(WindowsRK.GetValue("CurrentVersion").ToString()) / 10f;
 
         public static async Task InitializeAsync()
         {
             switch (CurrentVersion)
             {
                 case 6.1f:
-                    UBR = WindowsRK.GetValue("CSDVersion")?.ToString() ?? string.Empty;
-                    Version = $"{UBR} ({Build})";
+                    Version = WindowsRK.GetValue("CSDVersion")?.ToString() ?? string.Empty;
                     break;
 
                 case 6.2f:
@@ -118,38 +116,15 @@ namespace Watson
                     else
                     {
                         DisplayVersion = WindowsRK.GetValue("DisplayVersion").ToString();
-                        Version = $"{DisplayVersion}";
+                        Version = $"{Build}.{UBR}";
 
                         if (Build >= 22000)
                         {
                             ProductName = ProductName.Replace("Windows 10", "Windows 11");
                         }
-
-
-                        //GetMinimalInfo = $"{ProductName} {DisplayVersion} {Platform}";
                     }
                     break;
             }
-
-
-
-            if (ProductName.Contains("Enterprise LTSB 2016"))
-            {
-                EditionID = "EnterpriseSB";
-            }
-            else if (ProductName.Contains("Enterprise N LTSB 2016"))
-            {
-                EditionID = "EnterpriseSNB";
-            }
-
-            if (EditionID == "ServerRdsh" && Build <= 17134)
-            {
-                EditionID = "ServerRdsh134";
-            }
-
-            GetAllInfo = $"{ProductName} {Platform}";
-
-
 
             ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT ID FROM SoftwareLicensingProduct WHERE (ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f' AND PartialProductKey <> NULL)");
             ActID = searcher.Get().Cast<ManagementObject>()

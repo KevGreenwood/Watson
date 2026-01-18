@@ -20,140 +20,149 @@
 
         <ui:TitleBar Title="Watson" />
 
-        <StackPanel Grid.Row="1">
-            <ui:CardExpander Margin="20"
-                             IsExpanded="True"
-                             Icon="{ui:SymbolIcon Info20}">
-                <ui:CardExpander.Header>
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <ui:CardExpander Margin="20,0,20,10"
+                                 IsExpanded="True"
+                                 Icon="{ui:SymbolIcon Info20}">
+                    <ui:CardExpander.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ui:TextBlock Grid.Column="0"
+                                          FontSize="16"
+                                          VerticalAlignment="Center"
+                                          Text="Windows Specs" />
+
+                            <ui:Button Content="Copy"
+                                       Grid.Column="1"
+                                       Margin="0,0,16,0"
+                                       Click="Button_Click" />
+                        </Grid>
+                    </ui:CardExpander.Header>
+                    <StackPanel  Orientation="Vertical">
+                        <WrapPanel>
+                            <TextBlock Text="Product Name"
+                                       MinWidth="160"
+                                       Margin="0,0,10,7" />
+                            <TextBlock x:Name="productName"
+                                       Foreground="Gainsboro"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="600"
+                                       Margin="0,0,10,7" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="Version"
+                                       MinWidth="160"
+                                       Margin="0,0,10,7" />
+                            <TextBlock x:Name="version"
+                                       Margin="0,0,10,7"
+                                       Foreground="Gainsboro" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="Build"
+                                       MinWidth="160"
+                                       Margin="0,0,10,7" />
+                            <TextBlock x:Name="buildVersion"
+                                       Margin="0,0,10,7"
+                                       Foreground="Gainsboro" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="Product ID"
+                                       MinWidth="160"
+                                       Margin="0,0,10,7" />
+                            <TextBlock x:Name="productID"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,10,7"
+                                       Foreground="Gainsboro" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="Act ID"
+                                       MinWidth="160"
+                                       Margin="0,0,10,7" />
+                            <TextBlock x:Name="actID"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,10,7"
+                                       Foreground="Gainsboro" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="OEM Edition"
+                                       MinWidth="160"
+                                       Margin="0,0,10,7" />
+                            <TextBlock x:Name="oemEdition"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,10,7"
+                                       Foreground="Gainsboro" />
+                        </WrapPanel>
+                    </StackPanel>
+                </ui:CardExpander>
+
+                <ui:Card Margin="20,0,20,10">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <ui:TextBlock Grid.Column="0"
-                                      FontSize="16"
-                                      VerticalAlignment="Center"
-                                      Text="Windows Specs" />
+                        <WrapPanel >
+                            <TextBlock Text="OEM Key"
+                                       FontWeight="SemiBold"
+                                       MinWidth="160"
+                                       Margin="0,0,10,0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center" />
+                            <TextBlock x:Name="oemKey"
+                                       TextWrapping="Wrap"
+                                       MouseLeftButtonDown="oemKey_MouseLeftButtonDown"
+                                       VerticalAlignment="Center" />
+                           
 
-                        <ui:Button Content="Copy"
-                                   Grid.Column="1"
-                                   Margin="0,0,16,0"
-                                   Click="Button_Click" />
+                        </WrapPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+
+                            <ui:Button Icon="{ui:SymbolIcon Symbol=DocumentCopy20}"
+                                       Margin="60,0,20,0" />
+                            <ui:Button Grid.Column="1"
+                                       Icon="{ui:SymbolIcon Symbol=Eye20}" />
+                        </StackPanel>
                     </Grid>
-                </ui:CardExpander.Header>
-                <StackPanel  Orientation="Vertical">
+                    
+                    
+                    
+                </ui:Card>
 
+                <ui:Card Margin="20,0,20,10">
                     <WrapPanel>
-                        <TextBlock Text="Product Name"
+                        <TextBlock Text="Installed Key"
+                                   FontWeight="SemiBold"
                                    MinWidth="160"
-                                   Margin="0,0,10,7" />
-                        <TextBlock x:Name="productName"
-                                   Foreground="Gainsboro"
+                                   Margin="0,0,10,0"
+                                   VerticalAlignment="Center" />
+                        <TextBlock x:Name="softKey"
                                    TextWrapping="Wrap"
-                                   MaxWidth="600"
-                                   Margin="0,0,10,7" />
-                    </WrapPanel>
+                                   MouseLeftButtonDown="oemKey_MouseLeftButtonDown"
+                                   VerticalAlignment="Center" />
 
-                    <WrapPanel>
-                        <TextBlock Text="Version"
-                                   MinWidth="160"
-                                   Margin="0,0,10,7" />
-                        <TextBlock x:Name="version"
-                                   Margin="0,0,10,7"
-                                   Foreground="Gainsboro" />
+                        <ui:Button Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" />
+                        <ui:Button Icon="{ui:SymbolIcon Symbol=Eye20}" />
                     </WrapPanel>
+                </ui:Card>
 
+                <ui:Card Margin="20,0,20,10">
                     <WrapPanel>
-                        <TextBlock Text="Product ID"
+                        <TextBlock Text="Backup Key"
+                                   FontWeight="SemiBold"
                                    MinWidth="160"
-                                   Margin="0,0,10,7" />
-                        <TextBlock x:Name="productID"
+                                   Margin="0,0,10,0"
+                                   VerticalAlignment="Center" />
+                        <TextBlock x:Name="backupKey"
                                    TextWrapping="Wrap"
-                                   Margin="0,0,10,7"
-                                   Foreground="Gainsboro" />
+                                   MouseLeftButtonDown="oemKey_MouseLeftButtonDown"
+                                   VerticalAlignment="Center" />
+
+                        <ui:Button Icon="{ui:SymbolIcon Symbol=DocumentCopy20}"/>
+                        <ui:Button Icon="{ui:SymbolIcon Symbol=Eye20}"/>
                     </WrapPanel>
-
-                    <WrapPanel>
-                        <TextBlock Text="Build"
-                                   MinWidth="160"
-                                   Margin="0,0,10,7" />
-                        <TextBlock x:Name="buildVersion"
-                                   Margin="0,0,10,7"
-                                   Foreground="Gainsboro" />
-                    </WrapPanel>
-
-
-
-
-
-                    <WrapPanel>
-                        <TextBlock Text="OEM Edition"
-                                   MinWidth="160"
-                                   Margin="0,0,10,7" />
-                        <TextBlock x:Name="oemEdition"
-                                   TextWrapping="Wrap"
-                                   Margin="0,0,10,7"
-                                   Foreground="Gainsboro" />
-                    </WrapPanel>
-
-                </StackPanel>
-            </ui:CardExpander>
-
-            <ui:Card Margin="20,0,20,10">
-                <WrapPanel>
-                    <TextBlock Text="OEM Key"
-                               FontWeight="SemiBold"
-                               MinWidth="160"
-                               Margin="0,0,10,0"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center" />
-                    <TextBlock x:Name="oemKey"
-                               TextWrapping="Wrap"
-                               MouseLeftButtonDown="oemKey_MouseLeftButtonDown"
-                               VerticalAlignment="Center" />
-
-                    <ui:Button>Copy</ui:Button>
-                    <ui:Button>Show</ui:Button>
-                </WrapPanel>
-            </ui:Card>
-
-
-            <ui:Card Margin="20,0,20,0">
-                <WrapPanel>
-                    <TextBlock Text="Installed Key"
-                               FontWeight="SemiBold"
-                               MinWidth="160"
-                               Margin="0,0,10,0"
-                               VerticalAlignment="Center" />
-                    <TextBlock x:Name="softKey"
-                               TextWrapping="Wrap"
-                               MouseLeftButtonDown="oemKey_MouseLeftButtonDown"
-                               VerticalAlignment="Center" />
-
-                    <ui:Button>Copy</ui:Button>
-                    <ui:Button>Show</ui:Button>
-                </WrapPanel>
-            </ui:Card>
-
-            <ui:Card Margin="20,0,20,0">
-                <WrapPanel>
-                    <TextBlock Text="Backup Key"
-                               FontWeight="SemiBold"
-                               MinWidth="160"
-                               Margin="0,0,10,0"
-                               VerticalAlignment="Center" />
-                    <TextBlock x:Name="backupKey"
-                               TextWrapping="Wrap"
-                               MouseLeftButtonDown="oemKey_MouseLeftButtonDown"
-                               VerticalAlignment="Center" />
-
-                    <ui:Button>Copy</ui:Button>
-                    <ui:Button>Show</ui:Button>
-                </WrapPanel>
-            </ui:Card>
-
-        </StackPanel>
-
-
+                </ui:Card>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </ui:FluentWindow>
