@@ -5,7 +5,7 @@
                  Title="Watson"
                  Width="900"
                  Height="550"
-                 MinWidth="345"
+                 MinWidth="520"
                  ExtendsContentIntoTitleBar="True"
                  ResizeMode="CanResize"
                  WindowBackdropType="Acrylic"
@@ -100,9 +100,9 @@
                     </StackPanel>
                 </ui:CardExpander>
 
-                <ui:Card Margin="20,0,20,10">
-                    <Grid>
-                        <WrapPanel >
+                <ui:CardControl Margin="20,0,20,10">
+                    <ui:CardControl.Header>
+                        <WrapPanel>
                             <TextBlock Text="OEM Key"
                                        FontWeight="SemiBold"
                                        MinWidth="160"
@@ -111,57 +111,63 @@
                                        VerticalAlignment="Center" />
                             <TextBlock x:Name="oemKey"
                                        TextWrapping="Wrap"
-                                       MouseLeftButtonDown="oemKey_MouseLeftButtonDown"
                                        VerticalAlignment="Center" />
-                           
-
                         </WrapPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    </ui:CardControl.Header>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                        <ui:Button x:Name="showOem_Btn" Icon="{ui:SymbolIcon Symbol=Eye20}" Click="showOem_Btn_Click"
+                                   Margin="60,0,20,0" />
+                        <ui:Button x:Name="copyOem_Btn" Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" />
+                    </StackPanel>
+                </ui:CardControl>
 
-                            <ui:Button Icon="{ui:SymbolIcon Symbol=DocumentCopy20}"
-                                       Margin="60,0,20,0" />
-                            <ui:Button Grid.Column="1"
-                                       Icon="{ui:SymbolIcon Symbol=Eye20}" />
-                        </StackPanel>
-                    </Grid>
-                    
-                    
-                    
-                </ui:Card>
+                <ui:CardControl Margin="20,0,20,10">
+                    <ui:CardControl.Header>
+                        <WrapPanel>
+                            <TextBlock Text="Installed Key"
+                                       FontWeight="SemiBold"
+                                       MinWidth="160"
+                                       Margin="0,0,10,0"
+                                       VerticalAlignment="Center" />
+                            <TextBlock x:Name="softKey"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center" />
+                        </WrapPanel>
+                    </ui:CardControl.Header>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                        <ui:Button x:Name="showSoft_Btn" Icon="{ui:SymbolIcon Symbol=Eye20}" Click="showSoft_Btn_Click"
+                                   Margin="60,0,20,0" />
+                        <ui:Button x:Name="copySoft_Btn" Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" />
+                    </StackPanel>
+                </ui:CardControl>
 
-                <ui:Card Margin="20,0,20,10">
-                    <WrapPanel>
-                        <TextBlock Text="Installed Key"
-                                   FontWeight="SemiBold"
-                                   MinWidth="160"
-                                   Margin="0,0,10,0"
-                                   VerticalAlignment="Center" />
-                        <TextBlock x:Name="softKey"
-                                   TextWrapping="Wrap"
-                                   MouseLeftButtonDown="oemKey_MouseLeftButtonDown"
-                                   VerticalAlignment="Center" />
-
-                        <ui:Button Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" />
-                        <ui:Button Icon="{ui:SymbolIcon Symbol=Eye20}" />
-                    </WrapPanel>
-                </ui:Card>
-
-                <ui:Card Margin="20,0,20,10">
-                    <WrapPanel>
-                        <TextBlock Text="Backup Key"
-                                   FontWeight="SemiBold"
-                                   MinWidth="160"
-                                   Margin="0,0,10,0"
-                                   VerticalAlignment="Center" />
-                        <TextBlock x:Name="backupKey"
-                                   TextWrapping="Wrap"
-                                   MouseLeftButtonDown="oemKey_MouseLeftButtonDown"
-                                   VerticalAlignment="Center" />
-
-                        <ui:Button Icon="{ui:SymbolIcon Symbol=DocumentCopy20}"/>
-                        <ui:Button Icon="{ui:SymbolIcon Symbol=Eye20}"/>
-                    </WrapPanel>
-                </ui:Card>
+                <ui:CardControl Margin="20,0,20,10">
+                    <ui:CardControl.Header>
+                        <WrapPanel>
+                            <TextBlock Text="Backup Key"
+                                       FontWeight="SemiBold"
+                                       MinWidth="160"
+                                       Margin="0,0,10,0"
+                                       VerticalAlignment="Center" />
+                            <TextBlock x:Name="backupKey"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center" />
+                        </WrapPanel>
+                    </ui:CardControl.Header>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                        <ui:Button x:Name="showBackup_Btn"
+                                   Icon="{ui:SymbolIcon Symbol=Eye20}" Click="showBackup_Btn_Click"
+                                   Margin="60,0,20,0" />
+                        <ui:Button x:Name="copyBackup_Btn"
+                                   Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" />
+                    </StackPanel>
+                </ui:CardControl>
             </StackPanel>
         </ScrollViewer>
     </Grid>

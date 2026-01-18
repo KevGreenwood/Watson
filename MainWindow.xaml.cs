@@ -74,6 +74,48 @@ namespace Watson
             Clipboard.Clear();
             Clipboard.SetText(key);
         }
+
+        private void showOem_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            isCensored = !isCensored;
+
+            oemKey.Text = isCensored
+                ? censoredKey
+                : key;
+
+            showOem_Btn.Icon = new SymbolIcon
+            {
+                Symbol = isCensored ? SymbolRegular.Eye20 : SymbolRegular.EyeOff20
+            };
+        }
+
+        private void showSoft_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            isCensored = !isCensored;
+
+            softKey.Text = isCensored
+                ? censoredKey
+                : key;
+
+            showSoft_Btn.Icon = new SymbolIcon
+            {
+                Symbol = isCensored ? SymbolRegular.Eye20 : SymbolRegular.EyeOff20
+            };
+        }
+
+        private void showBackup_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            isCensored = !isCensored;
+
+            backupKey.Text = isCensored
+                ? censoredKey
+                : key;
+
+            showBackup_Btn.Icon = new SymbolIcon
+            {
+                Symbol = isCensored ? SymbolRegular.Eye20 : SymbolRegular.EyeOff20
+            };
+        }
     }
 
     public static class WindowsHandler
