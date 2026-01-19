@@ -12,9 +12,9 @@ namespace Watson
 {
     public partial class MainWindow : FluentWindow
     {
-        public string softKey_censored;
-        public string oemKey_censored;
-        public string backupKey_censored;
+        private string softKey_censored;
+        private string oemKey_censored;
+        private string backupKey_censored;
 
         private bool isCensored_oem = true;
         private bool isCensored_soft = true;
@@ -41,11 +41,40 @@ namespace Watson
             buildVersion.Text = $"{WindowsHandler.Version} {WindowsHandler.Platform}";
             productID.Text = WindowsHandler.ProductID;
             actID.Text = WindowsHandler.ActID;
-            oemEdition.Text = WindowsHandler.oemDescription;
+            oemEdition.Text = WindowsHandler.pkChannel;
 
             softKey.Text = softKey_censored;
             oemKey.Text = oemKey_censored;
             backupKey.Text = backupKey_censored;
+
+
+            /*if (WindowsHandler.oemKey == "")
+            {
+                oemKey.Text = "OEM key not present in firmware";
+                copyOem_Btn.IsEnabled = false;
+                showOem_Btn.IsEnabled = false;
+            }
+            if (WindowsHandler.backupKey == WindowsHandler.licenseKey)
+            { 
+                backupCard.Visibility = Visibility.Collapsed;
+            }*/
+
+          
+
+
+            var t1 = KeyFinder.GetKey_NT62(WindowsHandler._test1);
+            var t2 = KeyFinder.GetKey_NT62(WindowsHandler._test2);
+            if (WindowsHandler.oemKey == "")
+            {
+                oemKey.Text = t1;
+                copyOem_Btn.IsEnabled = false;
+                showOem_Btn.IsEnabled = false;
+            }
+            if (WindowsHandler.backupKey == WindowsHandler.licenseKey)
+            {
+                backupKey.Text = t2;
+            }
+
         }
 
         private void CopyToClipboard(string value)
@@ -131,6 +160,13 @@ namespace Watson
     {
         private static RegistryKey WindowsRK = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", false);
         private static RegistryKey BKkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform", false);
+        private static RegistryKey testRK = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\DefaultProductKey", false);
+        private static RegistryKey testRK2 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\DefaultProductKey2", false);
+
+
+        public static byte[] _test1 = (byte[])testRK.GetValue("DigitalProductId");
+        public static byte[] _test2 = (byte[])testRK2.GetValue("DigitalProductId");
+
 
         public static string ProductName = WindowsRK.GetValue("ProductName").ToString();
         public static string DisplayVersion { get; set; }
@@ -139,7 +175,7 @@ namespace Watson
         public static string Version { get; set; }
         public static string Platform = Environment.Is64BitOperatingSystem ? "(64-bit)" : "(32-bit)";
         public static string ProductID = WindowsRK.GetValue("ProductId").ToString();
-        public static string oemDescription { get; set; }
+        public static string pkChannel { get; set; }
         public static string oemKey { get; set; }
         public static string backupKey = BKkey.GetValue("BackupProductKeyDefault").ToString();
         public static string ActID { get; set; }
@@ -209,12 +245,16 @@ namespace Watson
 
             var obj = oemSearcher.Get().Cast<ManagementObject>().FirstOrDefault();
 
-            oemKey = obj?["OA3xOriginalProductKey"]?.ToString() ?? "";
+            oemKey = obj?["OA3xOriginalProductKey"]?.ToString().Trim() ?? "";
 
             var rawDesc = obj?["OA3xOriginalProductKeyDescription"]?.ToString() ?? "";
+            if (rawDesc == "")
+            {
+                return;
+            }
             var parts = rawDesc.Split(' ');
             if (parts.Length >= 3)
-                oemDescription = $"{parts[1]} {parts[2]}";
+                pkChannel = $"{parts[1]} {parts[2]}";
         }
     }
 
@@ -228,7 +268,7 @@ namespace Watson
         // For NT 6.2+ (Windows 8 and above)
         public static string GetKey_NT62(byte[] pkID)
         {
-            string key = String.Empty;
+            string key = string.Empty;
             Span<byte> rawKey = new Span<byte>(pkID, keyOffset, 15);
             rawKey[14] &= 0xf7;
 

@@ -159,7 +159,7 @@
                     </StackPanel>
                 </ui:CardControl>
 
-                <ui:CardControl Margin="20,0,20,10">
+                <ui:CardControl x:Name="backupCard" Margin="20,0,20,10">
                     <ui:CardControl.Header>
                         <WrapPanel>
                             <TextBlock Text="Backup Key"
