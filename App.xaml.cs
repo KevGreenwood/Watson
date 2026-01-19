@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 
 namespace Watson
 {
@@ -7,5 +8,10 @@ namespace Watson
     /// </summary>
     public partial class App : Application
     {
+        protected override async void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            await WindowsHandler.InitializeAsync();
+        }
     }
 }

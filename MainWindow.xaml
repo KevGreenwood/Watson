@@ -37,10 +37,10 @@
                                           VerticalAlignment="Center"
                                           Text="Windows Specs" />
 
-                            <ui:Button Content="Copy"
+                            <ui:Button x:Name="copySpecs_Btn" Content="Copy"
                                        Grid.Column="1"
                                        Margin="0,0,16,0"
-                                       Click="Button_Click" />
+                                       Click="copySpecs_Btn_Click" />
                         </Grid>
                     </ui:CardExpander.Header>
                     <StackPanel  Orientation="Vertical">
@@ -117,9 +117,12 @@
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center">
-                        <ui:Button x:Name="showOem_Btn" Icon="{ui:SymbolIcon Symbol=Eye20}" Click="showOem_Btn_Click"
+                        <ui:Button x:Name="showOem_Btn"
+                                   Icon="{ui:SymbolIcon Symbol=Eye20}"
+                                   Click="showOem_Btn_Click"
                                    Margin="60,0,20,0" />
-                        <ui:Button x:Name="copyOem_Btn" Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" />
+                        <ui:Button x:Name="copyOem_Btn"
+                                   Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" Click="copyOem_Btn_Click"/>
                     </StackPanel>
                 </ui:CardControl>
 
@@ -139,9 +142,12 @@
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center">
-                        <ui:Button x:Name="showSoft_Btn" Icon="{ui:SymbolIcon Symbol=Eye20}" Click="showSoft_Btn_Click"
+                        <ui:Button x:Name="showSoft_Btn"
+                                   Icon="{ui:SymbolIcon Symbol=Eye20}"
+                                   Click="showSoft_Btn_Click"
                                    Margin="60,0,20,0" />
-                        <ui:Button x:Name="copySoft_Btn" Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" />
+                        <ui:Button x:Name="copySoft_Btn"
+                                   Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" Click="copySoft_Btn_Click" />
                     </StackPanel>
                 </ui:CardControl>
 
@@ -162,10 +168,11 @@
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center">
                         <ui:Button x:Name="showBackup_Btn"
-                                   Icon="{ui:SymbolIcon Symbol=Eye20}" Click="showBackup_Btn_Click"
+                                   Icon="{ui:SymbolIcon Symbol=Eye20}"
+                                   Click="showBackup_Btn_Click"
                                    Margin="60,0,20,0" />
                         <ui:Button x:Name="copyBackup_Btn"
-                                   Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" />
+                                   Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" Click="copyBackup_Btn_Click"/>
                     </StackPanel>
                 </ui:CardControl>
             </StackPanel>
