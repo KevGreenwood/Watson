@@ -2,13 +2,14 @@
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
                  Title="Watson"
                  Width="900"
                  Height="550"
                  MinWidth="520"
                  ExtendsContentIntoTitleBar="True"
                  ResizeMode="CanResize"
-                 WindowBackdropType="Acrylic"
+                 WindowBackdropType="Tabbed"
                  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
                  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
 
@@ -23,8 +24,10 @@
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <StackPanel>
-                    <Image />
+                <StackPanel Margin="30">
+                    <svgc:SvgViewbox x:Name="Logo"
+                                     Height="75"
+                                     VerticalAlignment="Center" />
                 </StackPanel>
                 <ui:CardExpander Margin="20,0,20,10"
                                  IsExpanded="True"
@@ -106,6 +109,32 @@
                 <ui:CardControl Margin="20,0,20,10">
                     <ui:CardControl.Header>
                         <WrapPanel>
+                            <TextBlock Text="Installed Key"
+                                       FontWeight="SemiBold"
+                                       MinWidth="160"
+                                       Margin="0,0,10,0"
+                                       VerticalAlignment="Center" />
+                            <TextBlock x:Name="softKey"
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center" />
+                        </WrapPanel>
+                    </ui:CardControl.Header>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                        <ui:Button x:Name="showSoft_Btn"
+                                   Icon="{ui:SymbolIcon Symbol=Eye20}"
+                                   Click="showSoft_Btn_Click"
+                                   Margin="60,0,20,0" />
+                        <ui:Button x:Name="copySoft_Btn"
+                                   Icon="{ui:SymbolIcon Symbol=DocumentCopy20}"
+                                   Click="copySoft_Btn_Click" />
+                    </StackPanel>
+                </ui:CardControl>
+
+                <ui:CardControl Margin="20,0,20,10">
+                    <ui:CardControl.Header>
+                        <WrapPanel>
                             <TextBlock Text="OEM Key"
                                        FontWeight="SemiBold"
                                        MinWidth="160"
@@ -125,32 +154,8 @@
                                    Click="showOem_Btn_Click"
                                    Margin="60,0,20,0" />
                         <ui:Button x:Name="copyOem_Btn"
-                                   Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" Click="copyOem_Btn_Click"/>
-                    </StackPanel>
-                </ui:CardControl>
-
-                <ui:CardControl Margin="20,0,20,10">
-                    <ui:CardControl.Header>
-                        <WrapPanel>
-                            <TextBlock Text="Installed Key"
-                                       FontWeight="SemiBold"
-                                       MinWidth="160"
-                                       Margin="0,0,10,0"
-                                       VerticalAlignment="Center" />
-                            <TextBlock x:Name="softKey"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center" />
-                        </WrapPanel>
-                    </ui:CardControl.Header>
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center">
-                        <ui:Button x:Name="showSoft_Btn"
-                                   Icon="{ui:SymbolIcon Symbol=Eye20}"
-                                   Click="showSoft_Btn_Click"
-                                   Margin="60,0,20,0" />
-                        <ui:Button x:Name="copySoft_Btn"
-                                   Icon="{ui:SymbolIcon Symbol=DocumentCopy20}" Click="copySoft_Btn_Click" />
+                                   Icon="{ui:SymbolIcon Symbol=DocumentCopy20}"
+                                   Click="copyOem_Btn_Click" />
                     </StackPanel>
                 </ui:CardControl>
 

@@ -28,10 +28,10 @@ namespace Watson
 
             Wpf.Ui.Appearance.ApplicationThemeManager.Apply(
               Wpf.Ui.Appearance.ApplicationTheme.Dark, // Theme type
-              WindowBackdropType.Acrylic,  // Background type
+              WindowBackdropType.Tabbed,  // Background type
               true                                      // Whether to change accents automatically
             );
-
+            Logo.Source = WindowsHandler.Logo;
             softKey_censored = CensorKey(WindowsHandler.licenseKey);
             oemKey_censored = CensorKey(WindowsHandler.oemKey);
             backupKey_censored = CensorKey(WindowsHandler.backupKey);
@@ -65,7 +65,6 @@ namespace Watson
             {
                 splitted[i] = "XXXXX";
             }
-
             return string.Join("-", splitted);
         }
 
@@ -100,9 +99,8 @@ namespace Watson
             oemKey.Text = isCensored_oem
                 ? oemKey_censored
                 : WindowsHandler.oemKey;
-
+            
             showOem_Btn.Icon = isCensored_oem ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
-
         }
         private void showBackup_Btn_Click(object sender, RoutedEventArgs e)
         {
@@ -113,7 +111,6 @@ namespace Watson
                 : WindowsHandler.backupKey;
 
             showBackup_Btn.Icon = isCensored_backup ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
-
         }
 
         private void copySoft_Btn_Click(object sender, RoutedEventArgs e)
@@ -149,19 +146,21 @@ namespace Watson
         public static string ProductKey = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x3F8, 0x80);
         private static byte[] pkID = (byte[])WindowsHandler.WindowsRK.GetValue("DigitalProductId");
         public static string licenseKey { get; private set; }
-
         private static float CurrentVersion = float.Parse(WindowsRK.GetValue("CurrentVersion").ToString()) / 10f;
+        public static Uri Logo { get; set; }
 
         public static void Initialize()
         {
             switch (CurrentVersion)
             {
                 case 6.1f:
+                    Logo = new Uri("pack://application:,,,/Assets/w7.svg");
                     licenseKey = KeyFinder.GetKey_NT61(pkID);
                     Version = WindowsRK.GetValue("CSDVersion")?.ToString() ?? string.Empty;
                     break;
 
                 case 6.2f:
+                    Logo = new Uri("pack://application:,,,/Assets/w81.svg");
                     licenseKey = KeyFinder.GetKey_NT62(pkID);
                     Version = Build.ToString();
                     break;
@@ -172,17 +171,20 @@ namespace Watson
 
                     if (ProductName.Contains("8.1"))
                     {
+                        Logo = new Uri("pack://application:,,,/Assets/w81.svg");
                         Version = $"{Build}.{UBR}";
                     }
                     else
                     {
-                        DisplayVersion = WindowsRK.GetValue("DisplayVersion").ToString();
-                        Version = $"{Build}.{UBR}";
+                        Logo = new Uri("pack://application:,,,/Assets/w10.svg");
 
                         if (Build >= 22000)
                         {
+                            Logo = new Uri("pack://application:,,,/Assets/w11.svg");
                             ProductName = ProductName.Replace("Windows 10", "Windows 11");
                         }
+                        DisplayVersion = WindowsRK.GetValue("DisplayVersion").ToString();
+                        Version = $"{Build}.{UBR}";
                     }
                     break;
             }
