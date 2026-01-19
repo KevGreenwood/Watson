@@ -23,6 +23,9 @@
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto">
             <StackPanel>
+                <StackPanel>
+                    <Image />
+                </StackPanel>
                 <ui:CardExpander Margin="20,0,20,10"
                                  IsExpanded="True"
                                  Icon="{ui:SymbolIcon Info20}">

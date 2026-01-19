@@ -15,11 +15,10 @@ namespace Watson
         public string softKey_censored;
         public string oemKey_censored;
         public string backupKey_censored;
-        
+
         private bool isCensored_oem = true;
         private bool isCensored_soft = true;
         private bool isCensored_backup = true;
-
 
         public MainWindow()
         {
@@ -33,17 +32,16 @@ namespace Watson
               true                                      // Whether to change accents automatically
             );
 
-            productName.Text = WindowsHandler.ProductName;
-            version.Text = WindowsHandler.DisplayVersion;
-            buildVersion.Text = WindowsHandler.Version + ' ' + WindowsHandler.Platform;
-            productID.Text = WindowsHandler.ProductID;
-            actID.Text = WindowsHandler.ActID;
-
-            oemEdition.Text = WindowsHandler.oemDescription;
-
             softKey_censored = CensorKey(WindowsHandler.licenseKey);
             oemKey_censored = CensorKey(WindowsHandler.oemKey);
             backupKey_censored = CensorKey(WindowsHandler.backupKey);
+
+            productName.Text = WindowsHandler.ProductName;
+            version.Text = WindowsHandler.DisplayVersion;
+            buildVersion.Text = $"{WindowsHandler.Version} {WindowsHandler.Platform}";
+            productID.Text = WindowsHandler.ProductID;
+            actID.Text = WindowsHandler.ActID;
+            oemEdition.Text = WindowsHandler.oemDescription;
 
             softKey.Text = softKey_censored;
             oemKey.Text = oemKey_censored;
@@ -71,45 +69,6 @@ namespace Watson
             return string.Join("-", splitted);
         }
 
-        private void showOem_Btn_Click(object sender, RoutedEventArgs e)
-        {
-            isCensored_oem = !isCensored_oem;
-
-            oemKey.Text = isCensored_oem
-                ? oemKey_censored
-                : WindowsHandler.oemKey;
-
-            showOem_Btn.Icon = new SymbolIcon
-            {
-                Symbol = isCensored_oem ? SymbolRegular.Eye20 : SymbolRegular.EyeOff20
-            };
-        }
-
-        private void showSoft_Btn_Click(object sender, RoutedEventArgs e)
-        {
-            isCensored_soft = !isCensored_soft;
-
-            softKey.Text = isCensored_soft
-                ? softKey_censored
-                : WindowsHandler.licenseKey;
-
-            showSoft_Btn.Icon = isCensored_soft ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
-        }
-
-        private void showBackup_Btn_Click(object sender, RoutedEventArgs e)
-        {
-            isCensored_backup = !isCensored_backup;
-
-            backupKey.Text = isCensored_backup
-                ? backupKey_censored
-                : WindowsHandler.backupKey;
-
-            showBackup_Btn.Icon = new SymbolIcon
-            {
-                Symbol = isCensored_backup ? SymbolRegular.Eye20 : SymbolRegular.EyeOff20
-            };
-        }
-
         private void copySpecs_Btn_Click(object sender, RoutedEventArgs e)
         {
             var sb = new StringBuilder();
@@ -124,16 +83,47 @@ namespace Watson
             CopyToClipboard(sb.ToString());
         }
 
-        private void copyOem_Btn_Click(object sender, RoutedEventArgs e)
+        private void showSoft_Btn_Click(object sender, RoutedEventArgs e)
         {
-            CopyToClipboard(WindowsHandler.oemKey);
+            isCensored_soft = !isCensored_soft;
+
+            softKey.Text = isCensored_soft
+                ? softKey_censored
+                : WindowsHandler.licenseKey;
+
+            showSoft_Btn.Icon = isCensored_soft ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
+        }
+        private void showOem_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            isCensored_oem = !isCensored_oem;
+
+            oemKey.Text = isCensored_oem
+                ? oemKey_censored
+                : WindowsHandler.oemKey;
+
+            showOem_Btn.Icon = isCensored_oem ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
+
+        }
+        private void showBackup_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            isCensored_backup = !isCensored_backup;
+
+            backupKey.Text = isCensored_backup
+                ? backupKey_censored
+                : WindowsHandler.backupKey;
+
+            showBackup_Btn.Icon = isCensored_backup ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
+
         }
 
         private void copySoft_Btn_Click(object sender, RoutedEventArgs e)
         {
             CopyToClipboard(WindowsHandler.licenseKey);
         }
-
+        private void copyOem_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            CopyToClipboard(WindowsHandler.oemKey);
+        }
         private void copyBackup_Btn_Click(object sender, RoutedEventArgs e)
         {
             CopyToClipboard(WindowsHandler.backupKey);
@@ -153,7 +143,7 @@ namespace Watson
         public static string Platform = Environment.Is64BitOperatingSystem ? "(64-bit)" : "(32-bit)";
         public static string ProductID = WindowsRK.GetValue("ProductId").ToString();
         public static string oemDescription { get; set; }
-        public static string oemKey;
+        public static string oemKey { get; set; }
         public static string backupKey = BKkey.GetValue("BackupProductKeyDefault").ToString();
         public static string ActID { get; set; }
         public static string ProductKey = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x3F8, 0x80);
@@ -162,7 +152,7 @@ namespace Watson
 
         private static float CurrentVersion = float.Parse(WindowsRK.GetValue("CurrentVersion").ToString()) / 10f;
 
-        public static async Task InitializeAsync()
+        public static void Initialize()
         {
             switch (CurrentVersion)
             {
@@ -178,7 +168,6 @@ namespace Watson
 
                 case 6.3f:
                     licenseKey = KeyFinder.GetKey_NT62(pkID);
-
                     UBR = WindowsRK.GetValue("UBR")?.ToString() ?? string.Empty;
 
                     if (ProductName.Contains("8.1"))
@@ -197,26 +186,33 @@ namespace Watson
                     }
                     break;
             }
-
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT ID FROM SoftwareLicensingProduct WHERE (ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f' AND PartialProductKey <> NULL)");
-            ActID = searcher.Get().Cast<ManagementObject>()
-                                 .FirstOrDefault()?["ID"] as string ?? string.Empty;
-            GetLicenseKey();
             WindowsRK.Close();
+            BKkey.Close();
+            LoadWmiData();
         }
 
-        public static void GetLicenseKey()
+        private static void LoadWmiData()
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT OA3xOriginalProductKey FROM SoftwareLicensingService");
-            oemKey = searcher.Get().Cast<ManagementObject>()
-                                 .FirstOrDefault()?["OA3xOriginalProductKey"] as string ?? string.Empty;
-            searcher = new ManagementObjectSearcher("SELECT OA3xOriginalProductKeyDescription FROM SoftwareLicensingService");
+            var licSearcher = new ManagementObjectSearcher(
+                "SELECT ID FROM SoftwareLicensingProduct " +
+                "WHERE ApplicationID='55c92734-d682-4d71-983e-d6ec3f16059f' " +
+                "AND PartialProductKey IS NOT NULL");
 
-            var raw = searcher.Get().Cast<ManagementObject>()
-                                 .FirstOrDefault()?["OA3xOriginalProductKeyDescription"] as string ?? string.Empty;
-            var temp = raw.Split(' ');
-            oemDescription = $"{temp[1]} {temp[2]}";
+            ActID = licSearcher.Get()
+                .Cast<ManagementObject>()
+                .FirstOrDefault()?["ID"]?.ToString() ?? "";
 
+            var oemSearcher = new ManagementObjectSearcher(
+               "SELECT OA3xOriginalProductKey, OA3xOriginalProductKeyDescription FROM SoftwareLicensingService");
+
+            var obj = oemSearcher.Get().Cast<ManagementObject>().FirstOrDefault();
+
+            oemKey = obj?["OA3xOriginalProductKey"]?.ToString() ?? "";
+
+            var rawDesc = obj?["OA3xOriginalProductKeyDescription"]?.ToString() ?? "";
+            var parts = rawDesc.Split(' ');
+            if (parts.Length >= 3)
+                oemDescription = $"{parts[1]} {parts[2]}";
         }
     }
 
@@ -270,7 +266,7 @@ namespace Watson
                     int current = 0;
                     for (int j = 14; j >= 0; j--)
                     {
-                        current = (current << 8) | (byte)rawKey[j];
+                        current = (current << 8) | rawKey[j];
                         rawKey[j] = (byte)(current / 24);
                         current %= 24;
                         decodedChars[i] = Digits[current];
