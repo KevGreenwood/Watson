@@ -15,10 +15,13 @@ namespace Watson
         private string softKey_censored;
         private string oemKey_censored;
         private string backupKey_censored;
+        private string defaultKey_censored;
 
         private bool isCensored_oem = true;
         private bool isCensored_soft = true;
         private bool isCensored_backup = true;
+        private bool isCensored_default = true;
+
 
         public MainWindow()
         {
@@ -35,46 +38,37 @@ namespace Watson
             softKey_censored = CensorKey(WindowsHandler.licenseKey);
             oemKey_censored = CensorKey(WindowsHandler.oemKey);
             backupKey_censored = CensorKey(WindowsHandler.backupKey);
+            defaultKey_censored = CensorKey(WindowsHandler.defaultKey);
 
             productName.Text = WindowsHandler.ProductName;
             version.Text = WindowsHandler.DisplayVersion;
             buildVersion.Text = $"{WindowsHandler.Version} {WindowsHandler.Platform}";
             productID.Text = WindowsHandler.ProductID;
             actID.Text = WindowsHandler.ActID;
-            oemEdition.Text = WindowsHandler.pkChannel;
+
+            ///oemEdition.Text = WindowsHandler.pkChannel;
 
             softKey.Text = softKey_censored;
             oemKey.Text = oemKey_censored;
             backupKey.Text = backupKey_censored;
+            defaultKey.Text = defaultKey_censored;
 
 
-            /*if (WindowsHandler.oemKey == "")
+            if (WindowsHandler.oemKey == "")
             {
                 oemKey.Text = "OEM key not present in firmware";
                 copyOem_Btn.IsEnabled = false;
                 showOem_Btn.IsEnabled = false;
             }
+            
             if (WindowsHandler.backupKey == WindowsHandler.licenseKey)
             { 
                 backupCard.Visibility = Visibility.Collapsed;
-            }*/
-
-          
-
-
-            var t1 = KeyFinder.GetKey_NT62(WindowsHandler._test1);
-            var t2 = KeyFinder.GetKey_NT62(WindowsHandler._test2);
-            if (WindowsHandler.oemKey == "")
-            {
-                oemKey.Text = t1;
-                copyOem_Btn.IsEnabled = false;
-                showOem_Btn.IsEnabled = false;
             }
-            if (WindowsHandler.backupKey == WindowsHandler.licenseKey)
+            if (WindowsHandler.backupKey != WindowsHandler.defaultKey)
             {
-                backupKey.Text = t2;
+                defaultCard.Visibility = Visibility.Visible;
             }
-
         }
 
         private void CopyToClipboard(string value)
@@ -106,7 +100,7 @@ namespace Watson
             sb.AppendLine($"Build: {buildVersion.Text}");
             sb.AppendLine($"Product ID: {productID.Text}");
             sb.AppendLine($"Act ID: {actID.Text}");
-            sb.AppendLine($"OEM Edition: {oemEdition.Text}");
+            //sb.AppendLine($"OEM Edition: {oemEdition.Text}");
 
             CopyToClipboard(sb.ToString());
         }
@@ -154,19 +148,37 @@ namespace Watson
         {
             CopyToClipboard(WindowsHandler.backupKey);
         }
+
+        private void showDefault_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            isCensored_default = !isCensored_default;
+
+            defaultKey.Text = isCensored_default
+                ? defaultKey_censored
+                : WindowsHandler.defaultKey;
+
+            showDefault_Btn.Icon = isCensored_default ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
+        }
+
+        private void copyDefault_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            CopyToClipboard(WindowsHandler.defaultKey);
+
+        }
     }
 
     public static class WindowsHandler
     {
         private static RegistryKey WindowsRK = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", false);
         private static RegistryKey BKkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform", false);
-        private static RegistryKey testRK = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\DefaultProductKey", false);
-        private static RegistryKey testRK2 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\DefaultProductKey2", false);
+        private static RegistryKey DefaultPK = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\DefaultProductKey2", false);
 
+        // Generic Key
+        /*private static RegistryKey testRK = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\DefaultProductKey", false);
+        public static byte[] _test1 = (byte[])testRK.GetValue("DigitalProductId");*/
 
-        public static byte[] _test1 = (byte[])testRK.GetValue("DigitalProductId");
-        public static byte[] _test2 = (byte[])testRK2.GetValue("DigitalProductId");
-
+        // I guess, in this key, there is the previous key used before changing it to the new one, but I'm not sure lol
+        public static byte[] rawDefault_pkid = (byte[])DefaultPK.GetValue("DigitalProductId");
 
         public static string ProductName = WindowsRK.GetValue("ProductName").ToString();
         public static string DisplayVersion { get; set; }
@@ -182,6 +194,8 @@ namespace Watson
         public static string ProductKey = Encoding.Unicode.GetString((byte[])WindowsRK.GetValue("DigitalProductId4"), 0x3F8, 0x80);
         private static byte[] pkID = (byte[])WindowsHandler.WindowsRK.GetValue("DigitalProductId");
         public static string licenseKey { get; private set; }
+        public static string defaultKey { get; private set; }
+
         private static float CurrentVersion = float.Parse(WindowsRK.GetValue("CurrentVersion").ToString()) / 10f;
         public static Uri Logo { get; set; }
 
@@ -192,17 +206,20 @@ namespace Watson
                 case 6.1f:
                     Logo = new Uri("pack://application:,,,/Assets/w7.svg");
                     licenseKey = KeyFinder.GetKey_NT61(pkID);
+                    defaultKey = KeyFinder.GetKey_NT61(rawDefault_pkid);
                     Version = WindowsRK.GetValue("CSDVersion")?.ToString() ?? string.Empty;
                     break;
 
                 case 6.2f:
                     Logo = new Uri("pack://application:,,,/Assets/w81.svg");
                     licenseKey = KeyFinder.GetKey_NT62(pkID);
+                    defaultKey = KeyFinder.GetKey_NT62(rawDefault_pkid);
                     Version = Build.ToString();
                     break;
 
                 case 6.3f:
                     licenseKey = KeyFinder.GetKey_NT62(pkID);
+                    defaultKey = KeyFinder.GetKey_NT62(rawDefault_pkid);
                     UBR = WindowsRK.GetValue("UBR")?.ToString() ?? string.Empty;
 
                     if (ProductName.Contains("8.1"))
@@ -226,6 +243,7 @@ namespace Watson
             }
             WindowsRK.Close();
             BKkey.Close();
+            DefaultPK.Close();
             LoadWmiData();
         }
 
