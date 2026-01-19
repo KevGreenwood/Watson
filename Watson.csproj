@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationIcon>Assets\Watson.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="SharpVectors.Converters.Wpf, Version=1.8.5.0, Culture=neutral, PublicKeyToken=b532964b8548be77, processorArchitecture=MSIL">
       <HintPath>packages\SharpVectors.Wpf.1.8.5\lib\net48\SharpVectors.Converters.Wpf.dll</HintPath>
@@ -129,6 +132,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Assets\Watson.af" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -146,6 +150,12 @@
     <Resource Include="Assets\w11.svg" />
     <Resource Include="Assets\w7.svg" />
     <Resource Include="Assets\w81.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Watson.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Watson.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
