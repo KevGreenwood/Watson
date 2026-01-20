@@ -65,9 +65,13 @@ namespace Watson
             { 
                 backupCard.Visibility = Visibility.Collapsed;
             }
-            if (WindowsHandler.backupKey != WindowsHandler.defaultKey)
+            if (WindowsHandler.backupKey == WindowsHandler.defaultKey)
             {
-                defaultCard.Visibility = Visibility.Visible;
+                defaultCard.Visibility = Visibility.Collapsed;
+            }
+            if (WindowsHandler.licenseKey == WindowsHandler.defaultKey)
+            {
+                defaultCard.Visibility = Visibility.Collapsed;
             }
         }
 

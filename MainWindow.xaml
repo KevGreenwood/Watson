@@ -5,7 +5,7 @@
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Watson"
-    Width="645"
+    Width="650"
     Height="580"
     MinWidth="520"
     ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
@@ -156,10 +156,8 @@
                     </StackPanel>
                 </ui:CardControl>
 
-                <ui:CardControl
-                    x:Name="defaultCard"
-                    Margin="20,0,20,10"
-                    Visibility="Collapsed">
+                <ui:CardControl x:Name="defaultCard"
+                                Margin="20,0,20,10">
                     <ui:CardControl.Header>
                         <WrapPanel>
                             <TextBlock
