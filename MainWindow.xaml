@@ -108,7 +108,7 @@
                                 Foreground="Gainsboro"
                                 TextWrapping="Wrap" />
                         </WrapPanel>
-                        
+
                         <!--
                         <WrapPanel>
                             <TextBlock
@@ -156,8 +156,7 @@
                     </StackPanel>
                 </ui:CardControl>
 
-                <ui:CardControl x:Name="defaultCard"
-                                Margin="20,0,20,10">
+                <ui:CardControl x:Name="defaultCard" Margin="20,0,20,10">
                     <ui:CardControl.Header>
                         <WrapPanel>
                             <TextBlock

@@ -3,7 +3,6 @@ using System;
 using System.Linq;
 using System.Management;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Wpf.Ui.Controls;
 
@@ -60,16 +59,13 @@ namespace Watson
                 copyOem_Btn.IsEnabled = false;
                 showOem_Btn.IsEnabled = false;
             }
-            
+
             if (WindowsHandler.backupKey == WindowsHandler.licenseKey)
-            { 
+            {
                 backupCard.Visibility = Visibility.Collapsed;
             }
-            if (WindowsHandler.backupKey == WindowsHandler.defaultKey)
-            {
-                defaultCard.Visibility = Visibility.Collapsed;
-            }
-            if (WindowsHandler.licenseKey == WindowsHandler.defaultKey)
+            if (WindowsHandler.backupKey == WindowsHandler.defaultKey ||
+                WindowsHandler.licenseKey == WindowsHandler.defaultKey)
             {
                 defaultCard.Visibility = Visibility.Collapsed;
             }
@@ -126,7 +122,7 @@ namespace Watson
             oemKey.Text = isCensored_oem
                 ? oemKey_censored
                 : WindowsHandler.oemKey;
-            
+
             showOem_Btn.Icon = isCensored_oem ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
         }
         private void showBackup_Btn_Click(object sender, RoutedEventArgs e)
@@ -138,6 +134,16 @@ namespace Watson
                 : WindowsHandler.backupKey;
 
             showBackup_Btn.Icon = isCensored_backup ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
+        }
+        private void showDefault_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            isCensored_default = !isCensored_default;
+
+            defaultKey.Text = isCensored_default
+                ? defaultKey_censored
+                : WindowsHandler.defaultKey;
+
+            showDefault_Btn.Icon = isCensored_default ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
         }
 
         private void copySoft_Btn_Click(object sender, RoutedEventArgs e)
@@ -152,22 +158,9 @@ namespace Watson
         {
             CopyToClipboard(WindowsHandler.backupKey);
         }
-
-        private void showDefault_Btn_Click(object sender, RoutedEventArgs e)
-        {
-            isCensored_default = !isCensored_default;
-
-            defaultKey.Text = isCensored_default
-                ? defaultKey_censored
-                : WindowsHandler.defaultKey;
-
-            showDefault_Btn.Icon = isCensored_default ? new SymbolIcon(SymbolRegular.Eye20) : new SymbolIcon(SymbolRegular.EyeOff20);
-        }
-
         private void copyDefault_Btn_Click(object sender, RoutedEventArgs e)
         {
             CopyToClipboard(WindowsHandler.defaultKey);
-
         }
     }
 
@@ -182,7 +175,7 @@ namespace Watson
         public static byte[] _test1 = (byte[])testRK.GetValue("DigitalProductId");*/
 
         // I guess, in this key, there is the previous key used before changing it to the new one, but I'm not sure lol
-        public static byte[] rawDefault_pkid = (byte[])DefaultPK.GetValue("DigitalProductId");
+        private static byte[] rawDefault_pkid = (byte[])DefaultPK.GetValue("DigitalProductId");
 
         public static string ProductName = WindowsRK.GetValue("ProductName").ToString();
         public static string DisplayVersion { get; set; }
